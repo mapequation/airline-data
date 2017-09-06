@@ -1,0 +1,6 @@
+node_modules
+data
+db
+.ipynb_checkpoints
+.vscode
+.env

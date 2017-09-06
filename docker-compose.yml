@@ -1,0 +1,28 @@
+version: '3'
+services:
+  db:
+    image: mdillon/postgis
+    ports:
+      - "5432:5432"
+    # env_file:
+    #  - .env
+    environment:
+      POSTGRES_DB: airline
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+    volumes:
+      - ./db:/var/lib/postgresql/data
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+  pgadmin:
+    image: fenglc/pgadmin4
+    ports:
+      - "5050:5050"
+    environment:
+      DEFAULT_USER: "admin"
+      DEFAULT_PASSWORD: "admin"
+    depends_on:
+      - db
