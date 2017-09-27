@@ -1,0 +1,33 @@
+#!/bin/bash
+INFOMAP='./Infomap'
+
+if [ ! -f ${INFOMAP} ]; then
+    echo "Couldn't find $INFOMAP, please symlink it like 'ln -s path/to/Infomap .'"
+    exit 1
+fi
+
+echo
+echo -----------------------------------------------
+echo First order...
+echo -----------------------------------------------
+$INFOMAP data/2011_1234_states_1.net data -i states -zd -N10
+$INFOMAP data/2011_12_34_states_1_r25.net data -i states -zd -N10
+$INFOMAP data/2011_1_2_3_4_states_1_r25.net data -i states -zd -N10
+
+
+echo
+echo -----------------------------------------------
+echo Second order...
+echo -----------------------------------------------
+$INFOMAP data/2011_1234_states_2.net data -i states -zd -N10
+$INFOMAP data/2011_12_34_states_2_r25.net data -i states -zd -N10
+$INFOMAP data/2011_1_2_3_4_states_2_r25.net data -i states -zd -N10
+
+
+echo
+echo -----------------------------------------------
+echo Third order...
+echo -----------------------------------------------
+$INFOMAP data/2011_1234_states_3.net data -i states -zd -N10
+$INFOMAP data/2011_12_34_states_3_r25.net data -i states -zd -N10
+$INFOMAP data/2011_1_2_3_4_states_3_r25.net data -i states -zd -N10
