@@ -89,12 +89,14 @@ cat 341756927_T_DB1B_MARKET_2017_1.csv | cut -d, -f1 | sort -n | uniq -c | tr -s
 Generate paths with `make_paths.py`:
 
 ```
-usage: make_paths.py [-h] input
+usage: make_paths.py [-h] input [output]
 
 Make paths from csv data.
 
 positional arguments:
   input       input csv file
+  output      optional filename for output path data instead of default based
+              on input
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -106,6 +108,40 @@ python make_paths.py data/2011_1_Coupon.csv
 python make_paths.py data/2011_2_Coupon.csv
 python make_paths.py data/2011_3_Coupon.csv
 python make_paths.py data/2011_4_Coupon.csv
+```
+
+## Filter paths and add names
+
+Manipulate paths with `paths_to_paths.py`:
+
+```
+usage: paths_to_paths.py [-h] [--name-input NAME_INPUT] [-w WEIGHT_THRESHOLD]
+                         [-s SPLIT]
+                         input [input ...] output
+
+Filter paths.
+
+positional arguments:
+  input                 input path files
+  output                output filename
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --name-input NAME_INPUT
+                        external csv file with names to add to the paths
+  -w WEIGHT_THRESHOLD, --weight-threshold WEIGHT_THRESHOLD
+                        Ignore paths with weight less than this threshold
+                        (default: 0.0)
+  -s SPLIT, --split SPLIT
+                        Split to training/validation set with fraction <s>
+                        (between 0 and 1) of paths to validation set (default:
+                        0.0)
+```
+
+### Example
+To add names from an external file and filter paths for minimum weight 20, run for example
+```bash
+python paths_to_paths.py data/2015_1_Coupon_paths.net output/2015_1_paths.net -w 20 —name-input data/L_AIRPORT_ID.csv
 ```
 
 

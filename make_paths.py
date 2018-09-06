@@ -16,6 +16,14 @@ DEST_AIRPORT_ID = "DestAirportID"
 YEAR = "Year"
 QUARTER = "Quarter"
 
+# ITIN_ID = "ITIN_ID"
+# MKT_ID = "MKT_ID"
+# SEQ_NUM = "SEQ_NUM"
+# ORIGIN_AIRPORT_ID = "ORIGIN_AIRPORT_ID"
+# DEST_AIRPORT_ID = "DEST_AIRPORT_ID"
+# YEAR = "YEAR"
+# QUARTER = "QUARTER"
+
 def useNonPrezippedFormat():
     # Selected download
     ITIN_ID = "ITIN_ID"
@@ -77,8 +85,8 @@ def parseCsv(filename):
             if n > 1 and bigrams[n-2].targetId != bigrams[n-1].sourceId:
                 sys.exit("Bigram {} doesn't connect to previous bigrams {}".format(bigram, bigrams))
         # Get all connected by using targetId of all bigrams and prepend sourceId of first
-        # ngrams["{} {}".format(bigrams[0].sourceId, " ".join([bigram.targetId for bigram in bigrams]))] += 1
-        ngrams["{} {}".format(bigrams[0][0], " ".join([bigram[0] for bigram in bigrams]))] += 1
+        ngrams["{} {}".format(bigrams[0].sourceId, " ".join([bigram.targetId for bigram in bigrams]))] += 1
+        # ngrams["{} {}".format(bigrams[0][0], " ".join([bigram[1] for bigram in bigrams]))] += 1
     print("Done ")
 
 
@@ -92,7 +100,7 @@ def writeCsv(docs, filename, fieldnames):
             writer.writerow(doc)
 
 
-def run(filename):
+def run(filename, outputFilename):
     print('\n==== Starting ==== \n')
     t0, t1 = time.clock(), time.time()
     parseCsv(filename)
@@ -103,9 +111,10 @@ def run(filename):
     print("User mode time:   {}".format(resource.getrusage(resource.RUSAGE_SELF).ru_utime))
     print("System time:      {}".format(resource.getrusage(resource.RUSAGE_SELF).ru_stime))
     print('\n== Finished at', strftime("%Y-%m-%d %H:%M:%S", gmtime()), '== \n')
-    outname = "{}_paths.net".format(getName(filename))
-    print("Writing paths to {}...".format(outname))
-    with open(outname, mode='w') as outfile:
+    if not outputFilename:
+        outputFilename = "{}_paths.net".format(getName(filename))
+    print("Writing paths to {}...".format(outputFilename))
+    with open(outputFilename, mode='w') as outfile:
         outfile.write("*paths\n")
         for ngram in ngrams:
             outfile.write("{} {}\n".format(ngram, ngrams[ngram]))
@@ -116,9 +125,10 @@ def run(filename):
 def main(argv):
     parser = argparse.ArgumentParser(description='Make paths from csv data.')
     parser.add_argument('input', help='input csv file')
+    parser.add_argument('output', nargs='?', help='optional filename for output path data instead of default based on input')
 
     args = parser.parse_args()
-    run(args.input)
+    run(args.input, args.output)
 
 if __name__ == "__main__":
    main(sys.argv[1:])

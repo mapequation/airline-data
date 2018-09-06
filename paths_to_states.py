@@ -190,8 +190,8 @@ def writeCsv(docs, filename, fieldnames):
         for docid, doc in docs.items():
             writer.writerow(doc)
 
-def runSingle(pathsFilename, order):
-    parsePathsToStates(pathsFilename, order)
+def runSingle(pathsFilename, order, count_threshold):
+    parsePathsToStates(pathsFilename, order, count_threshold)
     
     outname = "data/{}_states_{}.net".format(getNameWithoutPath(pathsFilename), order)
     if order == 1:
@@ -236,7 +236,7 @@ def main(argv):
     print("  quarter: {}".format(args.quarter))
     print("  count_threshold: {}".format(args.count_threshold))
     if args.input:
-        runSingle(args.input, args.order)
+        runSingle(args.input, args.order, args.count_threshold)
     else:
         run(args.year, args.order, args.quarter, args.count_threshold)
 
